@@ -8,8 +8,8 @@ using namespace std;
 void matriz(int n, int m);
 void cargar_matriz(int **&pmatriz,int n,int m);
 int areascerradas(int **&pmatriz,int n, int m, int &i, int &j, int &valor);
-bool validar(int **&pmatriz, int n, int m, int &i, int &j);
-void mostrar(int **pmatriz, int n, int m);
+bool validar(int **&pmatriz, int n, int m, int &i, int &j, int x);
+void mostrar(int **pmatriz, int n, int m, int x);
 void liberar(int **pmatriz, int n);
 //int areacerradas(int **&pmatriz, int &i, int &j, int &a);
 //bool validar(int **&pmatriz,int n, int m);
@@ -39,7 +39,7 @@ void matriz(int n, int m){
     cargar_matriz(pmatriz, n, m);
 
 
-    mostrar(pmatriz, n, m);
+    //mostrar(pmatriz, n, m); Esta función está ahora dentro de la función "cargar_matriz"
 
     liberar(pmatriz, n);
 }
@@ -51,24 +51,34 @@ void cargar_matriz(int **&pmatriz,int n,int m){
 
     cout <<"Ingrese un numero con el que quiera cargar la matriz: ";
     cin >> x;
-    cout <<"Ingrese otro numero con el que quiera cargar la matriz: ";cin.get();
+    cout <<"Ingrese otro numero con el que quiera cargar la matriz: ";
     cin >> y;
 
-
+//En esta parte arregle un bug que, si ponias un valor de "x" mas grande que el de "y" no te mostraba la matriz
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
-            NUM = x + rand()%(y+1-x);
-            if (NUM == x){
-                pmatriz[i][j] = NUM;}
-            else {
-                pmatriz[i][j] = y;}
+            if(x < y){
+                NUM = x + rand()%(y+1-x);
+                if (NUM == x){
+                     pmatriz[i][j] = NUM;}
+                 else {
+                     pmatriz[i][j] = y;}
+            } else {
+                NUM = y + rand()%(x+1-y);
+                if (NUM == y){
+                     pmatriz[i][j] = NUM;}
+                 else {
+                     pmatriz[i][j] = x;}
+              }
         }
     }
-    areascerradas(pmatriz,n,m,i,j,y);
+     mostrar(pmatriz, n, m, x); //agregué el valor de x para que la funcion "validar" sea mas precisa
+    }
 
-}
+ //   areascerradas(pmatriz,n,m,i,j,y); Ahora está dentro de la función "validar"
 
-void mostrar(int **pmatriz, int n, int m){
+
+void mostrar(int **pmatriz, int n, int m, int x){
     int valor, i, j;
     for(i=0; i<n; i++){
         for(j=0; j<m; j++){
@@ -77,9 +87,9 @@ void mostrar(int **pmatriz, int n, int m){
         cout << endl;
     }
 
-    if (validar(pmatriz,n,m,i,j) == true)
+    if (validar(pmatriz,n,m,i,j,x) == true)
         cout << "Matriz Valida" << endl;
-    else cout << "Matriz Invalida";
+    else cout << "Matriz Invalida" << endl;
 }
 
 void liberar(int **pmatriz, int n){
@@ -93,22 +103,25 @@ int areascerradas(int **&pmatriz,int n, int m, int &i, int &j, int &valor){
     int band = 0;
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
-            if ((valor == (pmatriz[i][j+1]  || pmatriz[i+1][j])) && (i == 0)){
-                band = 1;
-            } else
-                if ((valor == (pmatriz[i][j+1] || pmatriz[i+1][j])) && (j == 0)){
+            if((j!=0)&&((i!=0) && (i!=(n-1))) && (pmatriz[i][j]==valor))
+                if ((valor == (pmatriz[i][j+1]  || pmatriz[i+1][j]))){
+                    band = 1;
+                } else
+                    if ((valor == (pmatriz[i][j+1] || pmatriz[i+1][j]))){
                         band = 1;
-            } else
-                    if ((valor == (pmatriz[i][j+1] || pmatriz[i][j-1] || pmatriz[i+1][j] || pmatriz[i-1][j])) && (i != 0) && (j != 0)){
+                } else
+                    if ((valor == (pmatriz[i][j+1] || pmatriz[i][j-1] || pmatriz[i+1][j] || pmatriz[i-1][j]))){
                         band = 1;
-            }
+                    } else{band = 0;}
+            if(band == 0)
+                break;
         }
      }
     return (band);
 }
 
 
-bool validar(int **&pmatriz, int n, int m, int &i, int &j){
+bool validar(int **&pmatriz, int n, int m, int &i, int &j, int x){
     int valor;
     //int band = 0;
     //pmatriz[i][j] = valor;
@@ -129,7 +142,7 @@ bool validar(int **&pmatriz, int n, int m, int &i, int &j){
 
 
 
-    if (areascerradas(pmatriz,n,m,i,j,valor) == 1)
+    if (areascerradas(pmatriz,n,m,i,j,x) == 1)
         return (true);
     else return (false);
 
