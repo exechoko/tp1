@@ -100,23 +100,103 @@ void liberar(int **pmatriz, int n){
 }
 
 int areascerradas(int **&pmatriz,int n, int m, int &i, int &j, int &valor){
-    int band = 0;
+    int band = 1;
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
-            if((j!=0)&&((i!=0) && (i!=(n-1))) && (pmatriz[i][j]==valor))
-                if ((valor == (pmatriz[i][j+1]  || pmatriz[i+1][j]))){
+           int band2=0;
+            if(pmatriz[i][j]==valor){
+                if (j==0 && i==0){
+                    band2=1;
+                    if((valor == pmatriz[i+1][j] )|| (valor == pmatriz[i][j+1] )){
+                        band = 1;
+                    }
+                    else {
+                       band = 0;
+                    }
+                }
+                if (j==(m-1) && i==(n-1)){
+                    band2=1;
+                    if((valor == pmatriz[i-1][j])|| (valor == pmatriz[i][j-1] )){
+                        band = 1;
+                    }
+                    else {
+                        band = 0;
+                    }
+                }
+                if (j==(m-1) && i==0){
+                    band2=1;
+                    if((valor == pmatriz[i+1][j] )|| (valor == pmatriz[i][j-1])){
+                        band = 1;
+                    }
+                    else {
+                        band =0;
+                    }
+                }
+                if (j==0 && i==(n-1)){
+                    band2=1;
+                    if((valor == pmatriz[i-1][j] ) || (valor == pmatriz[i][j+1])){
+                        band = 1;
+                    }
+                    else {
+                        band =0;
+                    }
+                }
+               if(band2==0){
+                       if (j==0){
+                           if((valor == pmatriz[i+1][j] )|| (valor == pmatriz[i][j+1] ) || (valor == pmatriz[i-1][j] )){
+                               band = 1;
+                           }
+                           else {
+                               band =0;
+                           }
+                       }
+                       if (i==0){
+                           if((valor == pmatriz[i+1][j] )|| (valor == pmatriz[i][j+1] ) || (valor == pmatriz[i][j-1])){
+                               band = 1;
+                           }
+                           else {
+                               band =0;
+                           }
+                       }
+                       if (j==(m-1)){
+                           if((valor == pmatriz[i+1][j] )|| (valor == pmatriz[i][j-1]) || (valor == pmatriz[i-1][j])){
+                               band = 1;
+                           }
+                           else {
+                               band =0;
+                           }
+                       }
+                       if (i==(n-1)){
+                           if((valor == pmatriz[i-1][j] )|| (valor == pmatriz[i][j-1]) || (valor == pmatriz[i][j+1])){
+                               band = 1;
+                           }
+                           else {
+                               band =0;
+                           }
+                       }
+                   }
+               }
+
+                /*if ((valor == (pmatriz[i][j+1]  || pmatriz[i+1][j]))){
                     band = 1;
-                } else
+                } else {
                     if ((valor == (pmatriz[i][j+1] || pmatriz[i+1][j]))){
                         band = 1;
-                } else
+                }} else{
                     if ((valor == (pmatriz[i][j+1] || pmatriz[i][j-1] || pmatriz[i+1][j] || pmatriz[i-1][j]))){
                         band = 1;
-                    } else{band = 0;}
-            if(band == 0)
-                break;
-        }
-     }
+                    } else{
+                band = 0;
+            }}*/
+            if(band == 0){
+                i=n;
+                j=m;
+            }
+          }
+         }
+
+
+
     return (band);
 }
 
